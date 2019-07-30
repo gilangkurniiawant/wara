@@ -1,6 +1,12 @@
 <?php
 session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location:login.php");
+    exit;
+}
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +35,7 @@ session_start();
     require "koneksi.php";
 
     $id = $_GET["id"];
-    $limit = isset($_GET['all']) ? '' : 'ORDER BY tanggal DESC LIMIT 3';
+    $limit = isset($_GET['all']) ? '' : 'ORDER BY tanggal DESC LIMIT 10';
 
 
     $q = "SELECT * FROM data_chat  WHERE id = $id " . $limit;

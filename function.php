@@ -1,6 +1,31 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "", "costumer");
 
+function login(){
+
+$conn = mysqli_connect('localhost', 'root', '', 'costumer');
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' AND password='$password'") or die(mysqli_error($conn));
+    
+    if (mysqli_num_rows($query) == 1) {
+        
+        $q = mysqli_fetch_array($query);
+
+        $_SESSION['user'] = $q['username'];
+        header("Location: data_costumer.php");
+     
+    } else {
+        echo "<script>alert('Gagal');</script>";
+  
+        header("Location: login.php");
+    }
+
+}
+
+
+
 function tambah($data)
 {
 
@@ -95,6 +120,7 @@ function upload_file($data)
         $chat = str_replace("'", "\'", $data[$a]['chat']);
         $nama  = $data[$a]['nama'];
         $tgl = $data[$a]['tanggal'];
+        //$tgl_akhir= $data[count($data)]['tanggal'];
         $id = $_GET['id'];
         $val = "SELECT * FROM data_chat where id = '$id' AND nama = '$nama'  AND tanggal = (SELECT STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i')) AND chat = '$chat'";
         $val_isi_chat = "SELECT * FROM data_chat where id = '$id'";

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["username"])) {
+if (isset($_SESSION["user"])) {
     header("Location:data_costumer.php");
     exit;
 }
@@ -25,13 +25,22 @@ if (isset($_SESSION["username"])) {
 </head>
 
 <body>
+<?php
+
+require "function.php";
+if (isset($_POST["submit"])) {
+
+  login();
+}
+
+?>
     <!-- <div class="container"> -->
     <div class="card">
         <div class="card-header">
             Login
         </div>
         <div class="card-body">
-            <form method="post" action="aksi_login.php?op=in">
+            <form method="post" action="">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" name="username" placeholder="Masukkan Username Anda">
@@ -41,11 +50,7 @@ if (isset($_SESSION["username"])) {
                     <label for="password">Password</label>
                     <input type="password" class="form-control" name="password" placeholder="Password">
                 </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
-                </div>
-                <button type="submit" name=submit class="btn btn-primary">Submit</button>
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
