@@ -7,11 +7,12 @@ function tambah($data)
     global $conn;
     $nama = htmlspecialchars($data["nama"]);
     $nomer = htmlspecialchars($data["nomer"]);
+    $brands = htmlspecialchars($data["brands"]);
 
 
     $query = "INSERT INTO data_costumer
                     VALUES
-                    ('','$nama','$nomer')
+                    ('','$nama','$nomer','','$brands')
                     ";
     mysqli_query($conn, $query);
     header("location:data_costumer.php");
@@ -33,14 +34,16 @@ function upload_file($data)
     $file = upload();
     $isi = getData($file);
     $a = explode("\n", $isi);
-   if(rmdir("Upload")){
-       echo"Sukses";
-   }else{
-       echo "gagal";
-   }
-   die();
-   mkdir("Upload");
-/*    
+
+    if (rmdir("Upload")) {
+        echo "berhasil dihapus";
+    } else {
+        echo "gagal dihapus";
+    }
+
+
+    $last = count($a) - 4;
+    /*    
     for($x=0; $x<4; $x++){
         echo $a[$last+$x];
     }
@@ -89,19 +92,29 @@ function upload_file($data)
     }
 
     for ($a = 0; $a < count($data); $a++) {
-        $chat = str_replace("'","\'",$data[$a]['chat']);
+        $chat = str_replace("'", "\'", $data[$a]['chat']);
         $nama  = $data[$a]['nama'];
         $tgl = $data[$a]['tanggal'];
         $id = $_GET['id'];
-        $val ="SELECT * from data_chat where id='$id' AND nama='$nama' AND tanggal= (SELECT STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i')) AND chat='$chat'";
-       
-        $exc = mysqli_query($conn, $val) or die($sql . "Error :" . mysqli_error($conn));
-        $jum = mysqli_num_rows($exc);
-        if($jum==0){
+        $val = "SELECT * FROM data_chat where id = '$id' AND nama = '$nama'  AND tanggal = (SELECT STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i')) AND chat = '$chat'";
+        $val_isi_chat = "SELECT * FROM data_chat where id = '$id'";
+        $eks_chat = mysqli_query($conn, $val) or die($val_isi_chat . "Error :" . mysqli_error($conn));
+        $jum_chat = mysqli_num_rows($eks_chat);
 
-        $sql = "INSERT INTO data_chat VALUES('$id','$nama',STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i'),'$chat')";
-        $exc = mysqli_query($conn, $sql) or die($sql . "Error :" . mysqli_error($conn));
-    }
+        $exc = mysqli_query($conn, $val) or die($val . "Error :" . mysqli_error($conn));
+        $jum = mysqli_num_rows($exc);
+
+        if ($a == 0) {
+            if ($jum_chat <= 1) {
+                $sql = "UPDATE data_costumer set tanggal=STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i') where id=$id";
+                mysqli_query($conn, $sql) or die($sql . "Error :" . mysqli_error($conn));
+            }
+        }
+        if ($jum == 0) {
+            $sql = "INSERT INTO data_chat VALUES('$id','$nama',STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i'),'$chat')";
+
+            $exc = mysqli_query($conn, $sql) or die($sql . "Error :" . mysqli_error($conn));
+        }
     }
 
     header("location:data_costumer.php");
@@ -115,7 +128,7 @@ function upload_file($data)
 
 
 
-    /*
+/*
     $query = "INSERT INTO data_chat
     VALUES
     ('$id','$file','$tanggal','$waktu')
@@ -158,7 +171,6 @@ function getData($nama)
 
 
 
-
     return $hasil;
 }
 function upload()
@@ -168,8 +180,6 @@ function upload()
     if ($_FILES['file_zip']['name'] != '') {
         $file_name = $_FILES['file_zip']['name'];
 
-        $old = umask(0);
-
 
         if (!file_exists('Upload/' . $namaFile)) {
             $namaFile = 'Upload/' . $namaFile;
@@ -178,7 +188,7 @@ function upload()
             $namaFile = 'Upload/' . $namaFile . rand(9, 100);
             mkdir($namaFile, 0777, true);
         }
-        umask($old);
+
 
         $array = explode(".", $file_name);
 
@@ -189,6 +199,7 @@ function upload()
             if (!file_exists($path))
                 mkdir($path);
 
+
             $location = $path . $file_name;
             if (move_uploaded_file($_FILES['file_zip']['tmp_name'], $location)) {
                 $zip = new ZipArchive;
@@ -198,6 +209,7 @@ function upload()
                 }
                 return $namaFile;
                 unlink($location);
+
 
                 echo "<script>alert('Data berhasil diupload'); location='data_costumer.php';</script>";
             }

@@ -70,6 +70,16 @@ document.location.href = 'data_costumer.php';
                     <input type="text" class="form-control" name="nomer">
                 </div>
 
+                <div class="form-group">
+                    <label for="brands">Brands</label>
+                    <select class="form-control" id="brands" name="brands">
+                        <option></option>
+                        <option>Rachacha</option>
+                        <option>Chagocha</option>
+                        <option>Fremilt</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="btn btn-primary" name="tambah">Submit</button>
             </form>
         </div>

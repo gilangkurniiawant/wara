@@ -7,11 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+
     <style>
         h5 {
             margin-top: 20px;
         }
     </style>
+
+
 </head>
 
 <body>
@@ -23,15 +27,16 @@
     $id = $_GET["id"];
     $limit = isset($_GET['all']) ? '' : 'ORDER BY tanggal DESC LIMIT 3';
 
-    $q = "SELECT * FROM data_chat WHERE id = $id ".$limit;
-    $sql ="  select * from (".$q.") tmp order by tmp.tanggal asc";
 
+    $q = "SELECT * FROM data_chat  WHERE id = $id " . $limit;
+
+    $sql = "  select * from (" . $q . ")  tmp order by tmp.tanggal asc";
     $result = isset($_GET['all']) ? mysqli_query($conn, $q) : mysqli_query($conn, $sql);
     $url = isset($_GET['all']) ? "detail.php?id=$id" : "detail.php?id=$id&all";
     $teks = isset($_GET['all']) ? 'Lihat Sebagian' : 'Lihat Semua';
 
     ?>
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,13 +59,12 @@
             </ul>
         </div>
     </nav>
-    
     <?php
     require "koneksi.php";
     ?>
 
     <div class="container">
-        <table class="table mt-5">
+        <table class="table table-striped table-borderd mt-5" id='data_table'>
             <thead>
 
                 <?php
@@ -70,9 +74,9 @@
                 ?>
                 <h5>Nama :<?= $data2["nama"] ?> </h5>
                 <h5>Nomer:<?= $data2["nomer"] ?></h5>
-                
+
                 <tr>
-                <a style="float:right" href="<?=$url?>" class="btn btn-primary"><?=$teks?></a>
+                    <a style="float:right" href="<?= $url ?>" class="btn btn-primary"><?= $teks ?></a>
                     <th scope="col">#</th>
                     <th scope="col">Nama</th>
                     <th scope="col">Tanggal</th>
@@ -81,7 +85,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $i = 1; 
+                <?php $i = 1;
                 ?>
 
                 <?php while ($data = mysqli_fetch_array($result)) : ?>
@@ -99,8 +103,8 @@
                         ?>
                         <th scope="row"><?= $i++ ?></th>
                         <td width="10%"><?= $data["nama"]; ?> </td>
-                        <td width="20%"><?= str_replace(":00","",$data["tanggal"]); ?> </td>
-                        <td><?= str_replace("<Media tidak disertakan>","->Media Tidak Disertakan ",$data["chat"]); ?></td>
+                        <td width="20%"><?= str_replace(":00", "", $data["tanggal"]); ?> </td>
+                        <td><?= str_replace("<Media tidak disertakan>", "->Media Tidak Disertakan ", $data["chat"]); ?></td>
 
 
 
@@ -114,7 +118,15 @@
 
 
     <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap4.min.js"></script>
     <script src="js/bootstrap.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#data_table').DataTable();
+        });
+    </script>
+
 </body>
 
 </html>
