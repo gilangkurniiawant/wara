@@ -48,33 +48,22 @@ if (!isset($_SESSION["user"])) {
     ?>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-        </div>
+        <a class="navbar-brand" href="data_costumer.php">Home</a>
+
     </nav>
+
+
+
+
+
     <?php
     require "koneksi.php";
     ?>
 
     <div class="container">
+
         <table class="table table-striped table-borderd mt-5" id='data_table'>
+
             <thead>
 
                 <?php
@@ -84,9 +73,14 @@ if (!isset($_SESSION["user"])) {
                 ?>
                 <h5>Nama :<?= $data2["nama"] ?> </h5>
                 <h5>Nomer:<?= $data2["nomer"] ?></h5>
-
                 <tr>
-                    <a style="float:right" href="<?= $url ?>" class="btn btn-primary"><?= $teks ?></a>
+                    <td colspan="4"> <a href="data_costumer.php"><button type="submit" class="btn btn-success">Kembali</button></a>
+
+                        <a style="float:right" href="<?= $url ?>" class="btn btn-primary"><?= $teks ?></a>
+                    </td>
+
+                </tr>
+                <tr>
                     <th scope="col">#</th>
                     <th scope="col">Nama</th>
                     <th scope="col">Tanggal</th>
@@ -121,7 +115,6 @@ if (!isset($_SESSION["user"])) {
                     <?php endwhile; ?>
             </tbody>
         </table>
-        <a href="data_costumer.php"><button type="submit" class="btn btn-success">Kembali</button></a>
 
     </div>
 

@@ -1,27 +1,26 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "", "costumer");
 
-function login(){
+function login()
+{
 
-$conn = mysqli_connect('localhost', 'root', '', 'costumer');
-$username = $_POST['username'];
-$password = $_POST['password'];
+    $conn = mysqli_connect('localhost', 'root', '', 'costumer');
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
     $query = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' AND password='$password'") or die(mysqli_error($conn));
-    
+
     if (mysqli_num_rows($query) == 1) {
-        
+
         $q = mysqli_fetch_array($query);
 
         $_SESSION['user'] = $q['username'];
         header("Location: data_costumer.php");
-     
     } else {
         echo "<script>alert('Gagal');</script>";
-  
+
         header("Location: login.php");
     }
-
 }
 
 
@@ -115,13 +114,16 @@ function upload_file($data)
             $data[] = array('tanggal' => str_replace("<br>", "", $tanggal[1]), 'nama' => $nama[1], 'chat' => $chat[1]);
         }
     }
-
+    $id = $_GET['id'];
+    $tgl_akhir = $data[count($data) - 1]['tanggal'];
+    $sql = "UPDATE data_costumer set tanggal_akhir=STR_TO_DATE('$tgl_akhir', '%d/%m/%Y %H.%i') where id=$id";
+    mysqli_query($conn, $sql) or die($sql . "Error :" . mysqli_error($conn));
     for ($a = 0; $a < count($data); $a++) {
         $chat = str_replace("'", "\'", $data[$a]['chat']);
         $nama  = $data[$a]['nama'];
         $tgl = $data[$a]['tanggal'];
         //$tgl_akhir= $data[count($data)]['tanggal'];
-        $id = $_GET['id'];
+
         $val = "SELECT * FROM data_chat where id = '$id' AND nama = '$nama'  AND tanggal = (SELECT STR_TO_DATE('$tgl', '%d/%m/%Y %H.%i')) AND chat = '$chat'";
         $val_isi_chat = "SELECT * FROM data_chat where id = '$id'";
         $eks_chat = mysqli_query($conn, $val) or die($val_isi_chat . "Error :" . mysqli_error($conn));
