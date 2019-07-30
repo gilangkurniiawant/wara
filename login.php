@@ -1,39 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<?php
-session_start();
- if (isset($_SESSION['user'])){
-    header("Location: index.php?page=bukutamu");
 
-}
-?>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <style>
+        .card {
+            margin-top: 50px;
+            width: 300px;
+            margin-left: 40%;
+        }
+    </style>
 </head>
-<body>
-<?php
-			if(@$_GET['alert']){
-			?>
-			<script>alert(<?php echo $_GET['alert'];?>);</script>
-                <?php
-				}
-	
-             
 
-                ?>
-    <div class="kotak_login">
-        <p class="tulisan_login">Silakan Login</p>
-        <form action="aksi.php?op=in" method="post">
-            <label>Username</label>
-            <input type="text" name="user" class="form_login">
-            <label>Password</label>
-            <input type="password" name="pass" class="form_login">
-            <input type="submit" value="LOGIN" class="tombol_login">
-        </form>
+<body>
+    <!-- <div class="container"> -->
+    <div class="card">
+        <div class="card-header">
+            Login
+        </div>
+        <div class="card-body">
+            <form method="post" action="aksi_login.php?op=in">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="Masukkan Username Anda">
+
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+                </div>
+                <button type="submit" name=submit class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
+
+    <!-- </div> -->
 </body>
+
 </html>
